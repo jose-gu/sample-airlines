@@ -1,0 +1,204 @@
+package com.crossairlines.service;
+
+import com.crossairlines.dto.FlightCreateRequest;
+import com.crossairlines.dto.FlightDetailsDto;
+import com.crossairlines.dto.FlightUpdateRequest;
+import com.crossairlines.exception.FlightNotFoundException;
+import com.crossairlines.mapper.FlightMapper;
+import com.crossairlines.model.FlightDetails;
+import com.crossairlines.repository.FlightRepository;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.*;
+
+@ExtendWith(MockitoExtension.class)
+class FlightServiceTest {
+    
+    @Mock
+    private FlightRepository flightRepository;
+    
+    @Mock
+    private FlightMapper flightMapper;
+    
+    @Mock
+    private FlightValidationService validationService;
+    
+    @InjectMocks
+    private FlightService flightService;
+    
+    private FlightDetails testFlight;
+    private FlightDetailsDto testFlightDto;
+    private FlightCreateRequest createRequest;
+    private FlightUpdateRequest updateRequest;
+    
+    @BeforeEach
+    void setUp() {
+        testFlight = new FlightDetails();
+        testFlight.setFlightDetailsId(1L);
+        testFlight.setFromCountry("India");
+        testFlight.setDestCountry("USA");
+        testFlight.setOriginCity("Mumbai");
+        testFlight.setDestinationCity("New York");
+        testFlight.setOriginAirport("BOM");
+        testFlight.setDestinationAirport("JFK");
+        testFlight.setDepartDate(LocalDate.now().plusDays(1));
+        testFlight.setDepartTime(LocalTime.of(10, 0));
+        testFlight.setArrivalDate(LocalDate.now().plusDays(1));
+        testFlight.setArrivalTime(LocalTime.of(22, 0));
+        testFlight.setEconomyFare(50000.0);
+        testFlight.setBusinessFare(100000.0);
+        testFlight.setFirstClassFare(200000.0);
+        testFlight.setCompany("Air India");
+        testFlight.setFlightType("Non Stop");
+        testFlight.setSeatsAvailable(150);
+        
+        testFlightDto = new FlightDetailsDto();
+        testFlightDto.setFlightDetailsId(1L);
+        testFlightDto.setFromCountry("India");
+        testFlightDto.setDestCountry("USA");
+        testFlightDto.setOriginCity("Mumbai");
+        testFlightDto.setDestinationCity("New York");
+        
+        createRequest = new FlightCreateRequest();
+        createRequest.setFromCountry("India");
+        createRequest.setDestCountry("USA");
+        createRequest.setOriginCity("Mumbai");
+        createRequest.setDestinationCity("New York");
+        createRequest.setDepartDate(LocalDate.now().plusDays(1));
+        createRequest.setDepartTime(LocalTime.of(10, 0));
+        createRequest.setArrivalDate(LocalDate.now().plusDays(1));
+        createRequest.setArrivalTime(LocalTime.of(22, 0));
+        createRequest.setEconomyFare(50000.0);
+        createRequest.setBusinessFare(100000.0);
+        createRequest.setFirstClassFare(200000.0);
+        createRequest.setCompany("Air India");
+        createRequest.setFlightType("Non Stop");
+        createRequest.setSeatsAvailable(150);
+        
+        updateRequest = new FlightUpdateRequest();
+        updateRequest.setEconomyFare(55000.0);
+        updateRequest.setSeatsAvailable(140);
+    }
+    
+    @Test
+    void testCreateFlight() {
+        when(flightMapper.mapCreateRequest(createRequest)).thenReturn(testFlight);
+        when(flightRepository.save(any(FlightDetails.class))).thenReturn(testFlight);
+        when(flightMapper.toDto(testFlight)).thenReturn(testFlightDto);
+        
+        FlightDetailsDto result = flightService.createFlight(createRequest);
+        
+        assertNotNull(result);
+        assertEquals(testFlightDto.getFlightDetailsId(), result.getFlightDetailsId());
+        verify(validationService).validateFlightSchedule(any(), any(), any(), any());
+        verify(validationService).validateCapacity(any());
+        verify(flightRepository).save(any(FlightDetails.class));
+    }
+    
+    @Test
+    void testUpdateFlight() {
+        when(flightRepository.findById(1L)).thenReturn(Optional.of(testFlight));
+        when(flightMapper.mapUpdateRequest(testFlight, updateRequest)).thenReturn(testFlight);
+        when(flightRepository.save(testFlight)).thenReturn(testFlight);
+        when(flightMapper.toDto(testFlight)).thenReturn(testFlightDto);
+        
+        FlightDetailsDto result = flightService.updateFlight(1L, updateRequest);
+        
+        assertNotNull(result);
+        assertEquals(testFlightDto.getFlightDetailsId(), result.getFlightDetailsId());
+        verify(flightRepository).findById(1L);
+        verify(flightRepository).save(testFlight);
+    }
+    
+    @Test
+    void testUpdateFlightNotFound() {
+        when(flightRepository.findById(1L)).thenReturn(Optional.empty());
+        
+        assertThrows(FlightNotFoundException.class, () -> {
+            flightService.updateFlight(1L, updateRequest);
+        });
+    }
+    
+    @Test
+    void testDeleteFlight() {
+        when(flightRepository.existsById(1L)).thenReturn(true);
+        
+        flightService.deleteFlight(1L);
+        
+        verify(flightRepository).deleteById(1L);
+    }
+    
+    @Test
+    void testDeleteFlightNotFound() {
+        when(flightRepository.existsById(1L)).thenReturn(false);
+        
+        assertThrows(FlightNotFoundException.class, () -> {
+            flightService.deleteFlight(1L);
+        });
+    }
+    
+    @Test
+    void testGetAllFlights() {
+        List<FlightDetails> flights = Arrays.asList(testFlight);
+        List<FlightDetailsDto> flightDtos = Arrays.asList(testFlightDto);
+        
+        when(flightRepository.findAll()).thenReturn(flights);
+        when(flightMapper.toDto(testFlight)).thenReturn(testFlightDto);
+        
+        List<FlightDetailsDto> result = flightService.getAllFlights();
+        
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(testFlightDto.getFlightDetailsId(), result.get(0).getFlightDetailsId());
+    }
+    
+    @Test
+    void testGetFlightById() {
+        when(flightRepository.findById(1L)).thenReturn(Optional.of(testFlight));
+        when(flightMapper.toDto(testFlight)).thenReturn(testFlightDto);
+        
+        FlightDetailsDto result = flightService.getFlightById(1L);
+        
+        assertNotNull(result);
+        assertEquals(testFlightDto.getFlightDetailsId(), result.getFlightDetailsId());
+    }
+    
+    @Test
+    void testGetFlightByIdNotFound() {
+        when(flightRepository.findById(1L)).thenReturn(Optional.empty());
+        
+        assertThrows(FlightNotFoundException.class, () -> {
+            flightService.getFlightById(1L);
+        });
+    }
+    
+    @Test
+    void testSearchFlights() {
+        List<FlightDetails> flights = Arrays.asList(testFlight);
+        LocalDate departDate = LocalDate.now().plusDays(1);
+        
+        when(flightRepository.findByOriginCityAndDestinationCityAndDepartDate(
+                "Mumbai", "New York", departDate)).thenReturn(flights);
+        when(flightMapper.toDto(testFlight)).thenReturn(testFlightDto);
+        
+        List<FlightDetailsDto> result = flightService.searchFlights("Mumbai", "New York", departDate);
+        
+        assertNotNull(result);
+        assertEquals(1, result.size());
+        assertEquals(testFlightDto.getFlightDetailsId(), result.get(0).getFlightDetailsId());
+    }
+}

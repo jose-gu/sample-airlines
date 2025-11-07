@@ -1,0 +1,20 @@
+package com.crossairlines.exception;
+
+public class FlightValidationException extends RuntimeException {
+    
+    public FlightValidationException() {
+        super();
+    }
+    
+    public FlightValidationException(String message) {
+        super(message);
+    }
+    
+    public FlightValidationException(String message, Throwable cause) {
+        super(message, cause);
+    }
+    
+    public FlightValidationException(Throwable cause) {
+        super(cause);
+    }
+}

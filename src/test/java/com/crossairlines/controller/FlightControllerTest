@@ -1,0 +1,175 @@
+package com.crossairlines.controller;
+
+import com.crossairlines.dto.FlightCreateRequest;
+import com.crossairlines.dto.FlightDetailsDto;
+import com.crossairlines.dto.FlightUpdateRequest;
+import com.crossairlines.service.FlightService;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.http.MediaType;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.Arrays;
+import java.util.List;
+
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
+import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
+@WebMvcTest(FlightController.class)
+class FlightControllerTest {
+    
+    @Autowired
+    private MockMvc mockMvc;
+    
+    @MockBean
+    private FlightService flightService;
+    
+    private ObjectMapper objectMapper;
+    private FlightDetailsDto testFlightDto;
+    private FlightCreateRequest createRequest;
+    private FlightUpdateRequest updateRequest;
+    
+    @BeforeEach
+    void setUp() {
+        objectMapper = new ObjectMapper();
+        objectMapper.registerModule(new JavaTimeModule());
+        
+        testFlightDto = new FlightDetailsDto();
+        testFlightDto.setFlightDetailsId(1L);
+        testFlightDto.setFromCountry("India");
+        testFlightDto.setDestCountry("USA");
+        testFlightDto.setOriginCity("Mumbai");
+        testFlightDto.setDestinationCity("New York");
+        testFlightDto.setOriginAirport("BOM");
+        testFlightDto.setDestinationAirport("JFK");
+        testFlightDto.setDepartDate(LocalDate.now().plusDays(1));
+        testFlightDto.setDepartTime(LocalTime.of(10, 0));
+        testFlightDto.setArrivalDate(LocalDate.now().plusDays(1));
+        testFlightDto.setArrivalTime(LocalTime.of(22, 0));
+        testFlightDto.setEconomyFare(50000.0);
+        testFlightDto.setBusinessFare(100000.0);
+        testFlightDto.setFirstClassFare(200000.0);
+        testFlightDto.setCompany("Air India");
+        testFlightDto.setFlightType("Non Stop");
+        testFlightDto.setSeatsAvailable(150);
+        
+        createRequest = new FlightCreateRequest();
+        createRequest.setFromCountry("India");
+        createRequest.setDestCountry("USA");
+        createRequest.setOriginCity("Mumbai");
+        createRequest.setDestinationCity("New York");
+        createRequest.setOriginAirport("BOM");
+        createRequest.setDestinationAirport("JFK");
+        createRequest.setDepartDate(LocalDate.now().plusDays(1));
+        createRequest.setDepartTime(LocalTime.of(10, 0));
+        createRequest.setArrivalDate(LocalDate.now().plusDays(1));
+        createRequest.setArrivalTime(LocalTime.of(22, 0));
+        createRequest.setEconomyFare(50000.0);
+        createRequest.setBusinessFare(100000.0);
+        createRequest.setFirstClassFare(200000.0);
+        createRequest.setCompany("Air India");
+        createRequest.setFlightType("Non Stop");
+        createRequest.setSeatsAvailable(150);
+        
+        updateRequest = new FlightUpdateRequest();
+        updateRequest.setEconomyFare(55000.0);
+        updateRequest.setSeatsAvailable(140);
+    }
+    
+    @Test
+    void testCreateFlight() throws Exception {
+        when(flightService.createFlight(any(FlightCreateRequest.class))).thenReturn(testFlightDto);
+        
+        mockMvc.perform(post("/api/flights")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(createRequest)))
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$.flightDetailsId").value(1L))
+                .andExpect(jsonPath("$.originCity").value("Mumbai"))
+                .andExpect(jsonPath("$.destinationCity").value("New York"));
+    }
+    
+    @Test
+    void testUpdateFlight() throws Exception {
+        when(flightService.updateFlight(anyLong(), any(FlightUpdateRequest.class))).thenReturn(testFlightDto);
+        
+        mockMvc.perform(put("/api/flights/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(objectMapper.writeValueAsString(updateRequest)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.flightDetailsId").value(1L));
+    }
+    
+    @Test
+    void testDeleteFlight() throws Exception {
+        mockMvc.perform(delete("/api/flights/1"))
+                .andExpect(status().isNoContent());
+    }
+    
+    @Test
+    void testGetAllFlights() throws Exception {
+        List<FlightDetailsDto> flights = Arrays.asList(testFlightDto);
+        when(flightService.getAllFlights()).thenReturn(flights);
+        
+        mockMvc.perform(get("/api/flights"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].flightDetailsId").value(1L))
+                .andExpect(jsonPath("$[0].originCity").value("Mumbai"));
+    }
+    
+    @Test
+    void testGetFlightById() throws Exception {
+        when(flightService.getFlightById(1L)).thenReturn(testFlightDto);
+        
+        mockMvc.perform(get("/api/flights/1"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.flightDetailsId").value(1L))
+                .andExpect(jsonPath("$.originCity").value("Mumbai"));
+    }
+    
+    @Test
+    void testSearchFlights() throws Exception {
+        List<FlightDetailsDto> flights = Arrays.asList(testFlightDto);
+        when(flightService.searchFlights(any(), any(), any())).thenReturn(flights);
+        
+        mockMvc.perform(get("/api/flights/search")
+                .param("originCity", "Mumbai")
+                .param("destinationCity", "New York")
+                .param("departDate", LocalDate.now().plusDays(1).toString()))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].flightDetailsId").value(1L));
+    }
+    
+    @Test
+    void testGetOriginCities() throws Exception {
+        List<String> cities = Arrays.asList("Mumbai", "Delhi", "Bangalore");
+        when(flightService.getOriginCities()).thenReturn(cities);
+        
+        mockMvc.perform(get("/api/flights/cities/origins"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0]").value("Mumbai"))
+                .andExpect(jsonPath("$[1]").value("Delhi"));
+    }
+    
+    @Test
+    void testGetDestinationCities() throws Exception {
+        List<String> cities = Arrays.asList("New York", "London", "Tokyo");
+        when(flightService.getDestinationCities("Mumbai")).thenReturn(cities);
+        
+        mockMvc.perform(get("/api/flights/cities/destinations")
+                .param("originCity", "Mumbai"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0]").value("New York"))
+                .andExpect(jsonPath("$[1]").value("London"));
+    }
+}

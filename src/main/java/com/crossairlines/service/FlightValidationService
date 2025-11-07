@@ -1,0 +1,57 @@
+package com.crossairlines.service;
+
+import com.crossairlines.exception.FlightValidationException;
+import com.crossairlines.repository.AirportRepository;
+import com.crossairlines.repository.FlightRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.LocalTime;
+
+@Service
+public class FlightValidationService {
+    
+    private final FlightRepository flightRepository;
+    private final AirportRepository airportRepository;
+    
+    @Autowired
+    public FlightValidationService(FlightRepository flightRepository, AirportRepository airportRepository) {
+        this.flightRepository = flightRepository;
+        this.airportRepository = airportRepository;
+    }
+    
+    public void validateFlightSchedule(LocalDate departDate, LocalDate arrivalDate, LocalTime departTime, LocalTime arrivalTime) {
+        if (departDate.isBefore(LocalDate.now())) {
+            throw new FlightValidationException("Departure date cannot be in the past");
+        }
+        
+        LocalDateTime departDateTime = LocalDateTime.of(departDate, departTime);
+        LocalDateTime arrivalDateTime = LocalDateTime.of(arrivalDate, arrivalTime);
+        
+        if (arrivalDateTime.isBefore(departDateTime) || arrivalDateTime.isEqual(departDateTime)) {
+            throw new FlightValidationException("Arrival date and time must be after departure date and time");
+        }
+    }
+    
+    public void validateCapacity(Integer seatsAvailable) {
+        if (seatsAvailable == null || seatsAvailable <= 0) {
+            throw new FlightValidationException("Seats available must be greater than zero");
+        }
+        
+        if (seatsAvailable > 500) {
+            throw new FlightValidationException("Seats available cannot exceed 500");
+        }
+    }
+    
+    public void validateRoutes(String originCity, String destinationCity, String originAirport, String destinationAirport) {
+        if (originCity.equalsIgnoreCase(destinationCity)) {
+            throw new FlightValidationException("Origin city and destination city cannot be the same");
+        }
+        
+        if (originAirport.equalsIgnoreCase(destinationAirport)) {
+            throw new FlightValidationException("Origin airport and destination airport cannot be the same");
+        }
+    }
+}

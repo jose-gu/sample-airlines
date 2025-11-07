@@ -1,0 +1,211 @@
+package com.crossairlines.dto;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import java.time.LocalDate;
+import java.time.LocalTime;
+
+public class FlightDetailsDto {
+    
+    private Long flightDetailsId;
+    
+    @NotBlank(message = "From country is required")
+    private String fromCountry;
+    
+    @NotBlank(message = "Destination country is required")
+    private String destCountry;
+    
+    @NotBlank(message = "Origin city is required")
+    private String originCity;
+    
+    @NotBlank(message = "Destination city is required")
+    private String destinationCity;
+    
+    @NotBlank(message = "Origin airport is required")
+    private String originAirport;
+    
+    @NotBlank(message = "Destination airport is required")
+    private String destinationAirport;
+    
+    @NotNull(message = "Departure date is required")
+    private LocalDate departDate;
+    
+    @NotNull(message = "Departure time is required")
+    private LocalTime departTime;
+    
+    @NotNull(message = "Arrival date is required")
+    private LocalDate arrivalDate;
+    
+    @NotNull(message = "Arrival time is required")
+    private LocalTime arrivalTime;
+    
+    @NotNull(message = "Economy fare is required")
+    @Positive(message = "Economy fare must be positive")
+    private Double economyFare;
+    
+    @NotNull(message = "Business fare is required")
+    @Positive(message = "Business fare must be positive")
+    private Double businessFare;
+    
+    @NotNull(message = "First class fare is required")
+    @Positive(message = "First class fare must be positive")
+    private Double firstClassFare;
+    
+    @NotBlank(message = "Company is required")
+    private String company;
+    
+    @NotBlank(message = "Flight type is required")
+    private String flightType;
+    
+    private Double timeTaken;
+    
+    @Positive(message = "Seats available must be positive")
+    private Integer seatsAvailable;
+    
+    public FlightDetailsDto() {}
+    
+    public Long getFlightDetailsId() {
+        return flightDetailsId;
+    }
+    
+    public void setFlightDetailsId(Long flightDetailsId) {
+        this.flightDetailsId = flightDetailsId;
+    }
+    
+    public String getFromCountry() {
+        return fromCountry;
+    }
+    
+    public void setFromCountry(String fromCountry) {
+        this.fromCountry = fromCountry;
+    }
+    
+    public String getDestCountry() {
+        return destCountry;
+    }
+    
+    public void setDestCountry(String destCountry) {
+        this.destCountry = destCountry;
+    }
+    
+    public String getOriginCity() {
+        return originCity;
+    }
+    
+    public void setOriginCity(String originCity) {
+        this.originCity = originCity;
+    }
+    
+    public String getDestinationCity() {
+        return destinationCity;
+    }
+    
+    public void setDestinationCity(String destinationCity) {
+        this.destinationCity = destinationCity;
+    }
+    
+    public String getOriginAirport() {
+        return originAirport;
+    }
+    
+    public void setOriginAirport(String originAirport) {
+        this.originAirport = originAirport;
+    }
+    
+    public String getDestinationAirport() {
+        return destinationAirport;
+    }
+    
+    public void setDestinationAirport(String destinationAirport) {
+        this.destinationAirport = destinationAirport;
+    }
+    
+    public LocalDate getDepartDate() {
+        return departDate;
+    }
+    
+    public void setDepartDate(LocalDate departDate) {
+        this.departDate = departDate;
+    }
+    
+    public LocalTime getDepartTime() {
+        return departTime;
+    }
+    
+    public void setDepartTime(LocalTime departTime) {
+        this.departTime = departTime;
+    }
+    
+    public LocalDate getArrivalDate() {
+        return arrivalDate;
+    }
+    
+    public void setArrivalDate(LocalDate arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
+    
+    public LocalTime getArrivalTime() {
+        return arrivalTime;
+    }
+    
+    public void setArrivalTime(LocalTime arrivalTime) {
+        this.arrivalTime = arrivalTime;
+    }
+    
+    public Double getEconomyFare() {
+        return economyFare;
+    }
+    
+    public void setEconomyFare(Double economyFare) {
+        this.economyFare = economyFare;
+    }
+    
+    public Double getBusinessFare() {
+        return businessFare;
+    }
+    
+    public void setBusinessFare(Double businessFare) {
+        this.businessFare = businessFare;
+    }
+    
+    public Double getFirstClassFare() {
+        return firstClassFare;
+    }
+    
+    public void setFirstClassFare(Double firstClassFare) {
+        this.firstClassFare = firstClassFare;
+    }
+    
+    public String getCompany() {
+        return company;
+    }
+    
+    public void setCompany(String company) {
+        this.company = company;
+    }
+    
+    public String getFlightType() {
+        return flightType;
+    }
+    
+    public void setFlightType(String flightType) {
+        this.flightType = flightType;
+    }
+    
+    public Double getTimeTaken() {
+        return timeTaken;
+    }
+    
+    public void setTimeTaken(Double timeTaken) {
+        this.timeTaken = timeTaken;
+    }
+    
+    public Integer getSeatsAvailable() {
+        return seatsAvailable;
+    }
+    
+    public void setSeatsAvailable(Integer seatsAvailable) {
+        this.seatsAvailable = seatsAvailable;
+    }
+}
