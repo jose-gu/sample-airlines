@@ -1,77 +1,138 @@
-package com.crossairlines.model;
+package com.crossairlines.dto;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
 
-@Entity
-@Table(name = "flight_details")
-public class FlightDetails {
+public class FlightDto {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "flight_details_id")
     private int flightDetailsId;
     
-    @Column(name = "from_country")
+    @NotBlank(message = "From country is required")
     private String fromCountry;
     
-    @Column(name = "dest_country")
+    @NotBlank(message = "Destination country is required")
     private String destCountry;
     
-    @Column(name = "origin_city")
+    @NotBlank(message = "Origin city is required")
     private String originCity;
     
-    @Column(name = "destination_city")
+    @NotBlank(message = "Destination city is required")
     private String destinationCity;
     
-    @Column(name = "origin_airport")
+    @NotBlank(message = "Origin airport is required")
     private String originAirport;
     
-    @Column(name = "destination_airport")
+    @NotBlank(message = "Destination airport is required")
     private String destinationAirport;
     
-    @Temporal(TemporalType.DATE)
-    @Column(name = "depart_date")
     private Date departDate;
+    private String departDatet;
     
-    @Column(name = "depart_time")
+    @NotBlank(message = "Departure time is required")
     private String departTime;
     
-    @Temporal(TemporalType.DATE)
-    @Column(name = "arrival_date")
     private Date arrivalDate;
+    private String arrivalDatet;
     
-    @Column(name = "arrival_time")
+    @NotBlank(message = "Arrival time is required")
     private String arrivalTime;
     
-    @Column(name = "economy_fare")
+    @Positive(message = "Economy fare must be positive")
     private double economyFare;
     
-    @Column(name = "business_fare")
+    @Positive(message = "Business fare must be positive")
     private double businessFare;
     
-    @Column(name = "first_class_fare")
+    @Positive(message = "First class fare must be positive")
     private double firstClassFare;
     
-    @Column(name = "company")
+    @NotBlank(message = "Company is required")
     private String company;
     
-    @Column(name = "flight_type")
+    @NotBlank(message = "Flight type is required")
     private String flightType;
     
-    @Column(name = "time_taken")
     private double timeTaken;
-    
-    @Column(name = "seats_available")
-    private int seatsAvailabe = 100;
+    private int size;
+    private int seatsAvailabe;
+    private int users;
+    private Date bookingDate;
+    private int userId;
+
+    public String getDepartDatet() {
+        return departDatet;
+    }
+
+    public void setDepartDatet(String departDatet) {
+        try {
+            this.departDate = new SimpleDateFormat("yyyy-MM-dd").parse(departDatet);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        this.departDatet = departDatet;
+    }
+
+    public String getArrivalDatet() {
+        return arrivalDatet;
+    }
+
+    public void setArrivalDatet(String arrivalDatet) {
+        try {
+            this.arrivalDate = new SimpleDateFormat("yyyy-MM-dd").parse(arrivalDatet);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        this.arrivalDatet = arrivalDatet;
+    }
+
+    public int getSize() {
+        return size;
+    }
+
+    public void setSize(int size) {
+        this.size = size;
+    }
+
+    public int getSeatsAvailabe() {
+        return seatsAvailabe;
+    }
+
+    public void setSeatsAvailabe(int seatsAvailabe) {
+        this.seatsAvailabe = seatsAvailabe;
+    }
+
+    public int getUsers() {
+        return users;
+    }
+
+    public void setUsers(int users) {
+        this.users = users;
+    }
+
+    public int getUserId() {
+        return userId;
+    }
+
+    public void setUserId(int userId) {
+        this.userId = userId;
+    }
+
+    public Date getBookingDate() {
+        return bookingDate;
+    }
+
+    public void setBookingDate(String bookingDate) {
+        try {
+            this.bookingDate = new SimpleDateFormat("yyyy-MM-dd").parse(bookingDate);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+    }
 
     public int getFlightDetailsId() {
         return flightDetailsId;
@@ -79,22 +140,6 @@ public class FlightDetails {
 
     public void setFlightDetailsId(int flightDetailsId) {
         this.flightDetailsId = flightDetailsId;
-    }
-
-    public String getFromCountry() {
-        return fromCountry;
-    }
-
-    public void setFromCountry(String fromCountry) {
-        this.fromCountry = fromCountry;
-    }
-
-    public String getDestCountry() {
-        return destCountry;
-    }
-
-    public void setDestCountry(String destCountry) {
-        this.destCountry = destCountry;
     }
 
     public String getOriginCity() {
@@ -127,6 +172,22 @@ public class FlightDetails {
 
     public void setDestinationAirport(String destinationAirport) {
         this.destinationAirport = destinationAirport;
+    }
+
+    public String getFromCountry() {
+        return fromCountry;
+    }
+
+    public void setFromCountry(String fromCountry) {
+        this.fromCountry = fromCountry;
+    }
+
+    public String getDestCountry() {
+        return destCountry;
+    }
+
+    public void setDestCountry(String destCountry) {
+        this.destCountry = destCountry;
     }
 
     public Date getDepartDate() {
@@ -209,12 +270,8 @@ public class FlightDetails {
         this.timeTaken = timeTaken;
     }
 
-    public int getSeatsAvailabe() {
-        return seatsAvailabe;
-    }
-
-    public void setSeatsAvailabe(int seatsAvailabe) {
-        this.seatsAvailabe = seatsAvailabe;
+    public void setBookingDate(Date bookingDate) {
+        this.bookingDate = bookingDate;
     }
 
     @Override
@@ -225,6 +282,7 @@ public class FlightDetails {
                 + departDate + ", departTime=" + departTime + ", arrivalDate=" + arrivalDate + ", arrivalTime="
                 + arrivalTime + ", economyFare=" + economyFare + ", businessFare=" + businessFare + ", firstClassFare="
                 + firstClassFare + ", company=" + company + ", flightType=" + flightType + ", timeTaken=" + timeTaken
-                + ", seatsAvailabe=" + seatsAvailabe + "]";
+                + ", size=" + size + ", seatsAvailabe=" + seatsAvailabe + ", users=" + users + ", bookingDate="
+                + bookingDate + ", userId=" + userId + "]";
     }
 }
