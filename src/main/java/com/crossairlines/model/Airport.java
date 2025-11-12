@@ -1,0 +1,89 @@
+package com.crossairlines.model;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "airports")
+public class Airport {
+    
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "airport_id")
+    private Long airportId;
+    
+    @Column(name = "origin_city", nullable = false)
+    private String originCity;
+    
+    @Column(name = "destination_city", nullable = false)
+    private String destinationCity;
+    
+    @Column(name = "origin_airport", nullable = false)
+    private String originAirport;
+    
+    @Column(name = "destination_airport", nullable = false)
+    private String destinationAirport;
+    
+    @Column(name = "distance")
+    private Double distance;
+    
+    @Column(name = "time_taken")
+    private Double timeTaken;
+
+    public Airport() {}
+
+    public Long getAirportId() {
+        return airportId;
+    }
+
+    public void setAirportId(Long airportId) {
+        this.airportId = airportId;
+    }
+
+    public String getOriginCity() {
+        return originCity;
+    }
+
+    public void setOriginCity(String originCity) {
+        this.originCity = originCity;
+    }
+
+    public String getDestinationCity() {
+        return destinationCity;
+    }
+
+    public void setDestinationCity(String destinationCity) {
+        this.destinationCity = destinationCity;
+    }
+
+    public String getOriginAirport() {
+        return originAirport;
+    }
+
+    public void setOriginAirport(String originAirport) {
+        this.originAirport = originAirport;
+    }
+
+    public String getDestinationAirport() {
+        return destinationAirport;
+    }
+
+    public void setDestinationAirport(String destinationAirport) {
+        this.destinationAirport = destinationAirport;
+    }
+
+    public Double getDistance() {
+        return distance;
+    }
+
+    public void setDistance(Double distance) {
+        this.distance = distance;
+    }
+
+    public Double getTimeTaken() {
+        return timeTaken;
+    }
+
+    public void setTimeTaken(Double timeTaken) {
+        this.timeTaken = timeTaken;
+    }
+}
