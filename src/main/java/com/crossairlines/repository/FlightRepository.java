@@ -7,4 +7,5 @@ import com.crossairlines.model.FlightDetails;
 
 @Repository
 public interface FlightRepository extends JpaRepository<FlightDetails, Integer> {
+    
 }

@@ -2,64 +2,54 @@ package com.crossairlines.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.crossairlines.dto.FlightDto;
+import com.crossairlines.dto.FlightRequestDto;
+import com.crossairlines.dto.FlightResponseDto;
 import com.crossairlines.model.FlightDetails;
 import com.crossairlines.repository.FlightRepository;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-
 @Service
+@Transactional
 public class FlightService {
 
     @Autowired
     private FlightRepository flightRepository;
 
-    public void addFlight(FlightDto flightDto) {
-        FlightDetails flightDetails = mapToEntity(flightDto);
-        flightRepository.save(flightDetails);
-    }
-
-    private FlightDetails mapToEntity(FlightDto flightDto) {
+    public FlightResponseDto addFlight(FlightRequestDto flightRequest) {
+        System.out.println(flightRequest);
+        
         FlightDetails flightDetails = new FlightDetails();
         
-        flightDetails.setFlightDetailsId(flightDto.getFlightDetailsId());
-        flightDetails.setFromCountry(flightDto.getFromCountry());
-        flightDetails.setDestCountry(flightDto.getDestCountry());
-        flightDetails.setOriginCity(flightDto.getOriginCity());
-        flightDetails.setDestinationCity(flightDto.getDestinationCity());
-        flightDetails.setOriginAirport(flightDto.getOriginAirport());
-        flightDetails.setDestinationAirport(flightDto.getDestinationAirport());
+        // Copy properties from DTO to entity
+        flightDetails.setFlightDetailsId(flightRequest.getFlightDetailsId());
+        flightDetails.setFromCountry(flightRequest.getFromCountry());
+        flightDetails.setDestCountry(flightRequest.getDestCountry());
+        flightDetails.setOriginCity(flightRequest.getOriginCity());
+        flightDetails.setDestinationCity(flightRequest.getDestinationCity());
+        flightDetails.setOriginAirport(flightRequest.getOriginAirport());
+        flightDetails.setDestinationAirport(flightRequest.getDestinationAirport());
+        flightDetails.setDepartDate(flightRequest.getDepartDate());
+        flightDetails.setDepartTime(flightRequest.getDepartTime());
+        flightDetails.setArrivalDate(flightRequest.getArrivalDate());
+        flightDetails.setArrivalTime(flightRequest.getArrivalTime());
+        flightDetails.setEconomyFare(flightRequest.getEconomyFare());
+        flightDetails.setBusinessFare(flightRequest.getBusinessFare());
+        flightDetails.setFirstClassFare(flightRequest.getFirstClassFare());
+        flightDetails.setCompany(flightRequest.getCompany());
+        flightDetails.setFlightType(flightRequest.getFlightType());
+        flightDetails.setTimeTaken(flightRequest.getTimeTaken());
+        flightDetails.setSeatsAvailabe(flightRequest.getSeatsAvailabe());
         
-        // Handle date parsing for departure date
-        if (flightDto.getDepartDatet() != null && !flightDto.getDepartDatet().isEmpty()) {
-            try {
-                flightDetails.setDepartDate(new SimpleDateFormat("yyyy-MM-dd").parse(flightDto.getDepartDatet()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+        System.out.println(flightDetails);
         
-        // Handle date parsing for arrival date
-        if (flightDto.getArrivalDatet() != null && !flightDto.getArrivalDatet().isEmpty()) {
-            try {
-                flightDetails.setArrivalDate(new SimpleDateFormat("yyyy-MM-dd").parse(flightDto.getArrivalDatet()));
-            } catch (ParseException e) {
-                e.printStackTrace();
-            }
-        }
+        FlightDetails savedFlight = flightRepository.save(flightDetails);
         
-        flightDetails.setDepartTime(flightDto.getDepartTime());
-        flightDetails.setArrivalTime(flightDto.getArrivalTime());
-        flightDetails.setEconomyFare(flightDto.getEconomyFare());
-        flightDetails.setBusinessFare(flightDto.getBusinessFare());
-        flightDetails.setFirstClassFare(flightDto.getFirstClassFare());
-        flightDetails.setCompany(flightDto.getCompany());
-        flightDetails.setFlightType(flightDto.getFlightType());
-        flightDetails.setTimeTaken(flightDto.getTimeTaken());
-        flightDetails.setSeatsAvailabe(flightDto.getSeatsAvailabe());
+        FlightResponseDto response = new FlightResponseDto();
+        response.setMessage("Flight added successfully");
+        response.setFlightId(savedFlight.getFlightDetailsId());
+        response.setSuccess(true);
         
-        return flightDetails;
+        return response;
     }
 }

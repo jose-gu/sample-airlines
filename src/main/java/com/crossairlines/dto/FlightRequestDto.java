@@ -1,68 +1,79 @@
 package com.crossairlines.dto;
 
-import javax.validation.constraints.NotBlank;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import javax.validation.constraints.NotNull;
-import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
+import javax.validation.constraints.Min;
 
 public class FlightRequestDto {
     
     private int flightDetailsId;
     
-    @NotBlank(message = "From country is required")
+    @NotNull(message = "From country is required")
+    @Size(min = 2, max = 100, message = "From country must be between 2 and 100 characters")
     private String fromCountry;
     
-    @NotBlank(message = "Destination country is required")
+    @NotNull(message = "Destination country is required")
+    @Size(min = 2, max = 100, message = "Destination country must be between 2 and 100 characters")
     private String destCountry;
     
-    @NotBlank(message = "Origin city is required")
+    @NotNull(message = "Origin city is required")
+    @Size(min = 2, max = 100, message = "Origin city must be between 2 and 100 characters")
     private String originCity;
     
-    @NotBlank(message = "Destination city is required")
+    @NotNull(message = "Destination city is required")
+    @Size(min = 2, max = 100, message = "Destination city must be between 2 and 100 characters")
     private String destinationCity;
     
-    @NotBlank(message = "Origin airport is required")
+    @NotNull(message = "Origin airport is required")
+    @Size(min = 2, max = 100, message = "Origin airport must be between 2 and 100 characters")
     private String originAirport;
     
-    @NotBlank(message = "Destination airport is required")
+    @NotNull(message = "Destination airport is required")
+    @Size(min = 2, max = 100, message = "Destination airport must be between 2 and 100 characters")
     private String destinationAirport;
     
-    @NotBlank(message = "Departure date is required")
+    @NotNull(message = "Departure date is required")
+    private Date departDate;
+    
     private String departDatet;
     
-    @NotBlank(message = "Departure time is required")
+    @NotNull(message = "Departure time is required")
     private String departTime;
     
-    @NotBlank(message = "Arrival date is required")
+    @NotNull(message = "Arrival date is required")
+    private Date arrivalDate;
+    
     private String arrivalDatet;
     
-    @NotBlank(message = "Arrival time is required")
+    @NotNull(message = "Arrival time is required")
     private String arrivalTime;
     
-    @NotNull(message = "Economy fare is required")
-    @Positive(message = "Economy fare must be positive")
-    private Double economyFare;
+    @Min(value = 0, message = "Economy fare must be positive")
+    private double economyFare;
     
-    @NotNull(message = "Business fare is required")
-    @Positive(message = "Business fare must be positive")
-    private Double businessFare;
+    @Min(value = 0, message = "Business fare must be positive")
+    private double businessFare;
     
-    @NotNull(message = "First class fare is required")
-    @Positive(message = "First class fare must be positive")
-    private Double firstClassFare;
+    @Min(value = 0, message = "First class fare must be positive")
+    private double firstClassFare;
     
-    @NotBlank(message = "Company is required")
+    @NotNull(message = "Company is required")
+    @Size(min = 2, max = 100, message = "Company must be between 2 and 100 characters")
     private String company;
     
-    @NotBlank(message = "Flight type is required")
+    @NotNull(message = "Flight type is required")
     private String flightType;
     
+    @Min(value = 0, message = "Time taken must be positive")
     private double timeTaken;
+    
+    @Min(value = 1, message = "Seats available must be at least 1")
     private int seatsAvailabe = 100;
     
-    // Default constructor
-    public FlightRequestDto() {}
-    
-    // Getters and Setters
     public int getFlightDetailsId() {
         return flightDetailsId;
     }
@@ -119,11 +130,24 @@ public class FlightRequestDto {
         this.destinationAirport = destinationAirport;
     }
     
+    public Date getDepartDate() {
+        return departDate;
+    }
+    
+    public void setDepartDate(Date departDate) {
+        this.departDate = departDate;
+    }
+    
     public String getDepartDatet() {
         return departDatet;
     }
     
     public void setDepartDatet(String departDatet) {
+        try {
+            this.departDate = new SimpleDateFormat("yyyy-MM-dd").parse(departDatet);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         this.departDatet = departDatet;
     }
     
@@ -135,11 +159,24 @@ public class FlightRequestDto {
         this.departTime = departTime;
     }
     
+    public Date getArrivalDate() {
+        return arrivalDate;
+    }
+    
+    public void setArrivalDate(Date arrivalDate) {
+        this.arrivalDate = arrivalDate;
+    }
+    
     public String getArrivalDatet() {
         return arrivalDatet;
     }
     
     public void setArrivalDatet(String arrivalDatet) {
+        try {
+            this.arrivalDate = new SimpleDateFormat("yyyy-MM-dd").parse(arrivalDatet);
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
         this.arrivalDatet = arrivalDatet;
     }
     
@@ -151,27 +188,27 @@ public class FlightRequestDto {
         this.arrivalTime = arrivalTime;
     }
     
-    public Double getEconomyFare() {
+    public double getEconomyFare() {
         return economyFare;
     }
     
-    public void setEconomyFare(Double economyFare) {
+    public void setEconomyFare(double economyFare) {
         this.economyFare = economyFare;
     }
     
-    public Double getBusinessFare() {
+    public double getBusinessFare() {
         return businessFare;
     }
     
-    public void setBusinessFare(Double businessFare) {
+    public void setBusinessFare(double businessFare) {
         this.businessFare = businessFare;
     }
     
-    public Double getFirstClassFare() {
+    public double getFirstClassFare() {
         return firstClassFare;
     }
     
-    public void setFirstClassFare(Double firstClassFare) {
+    public void setFirstClassFare(double firstClassFare) {
         this.firstClassFare = firstClassFare;
     }
     
@@ -205,5 +242,16 @@ public class FlightRequestDto {
     
     public void setSeatsAvailabe(int seatsAvailabe) {
         this.seatsAvailabe = seatsAvailabe;
+    }
+    
+    @Override
+    public String toString() {
+        return "FlightRequestDto [flightDetailsId=" + flightDetailsId + ", fromCountry=" + fromCountry + ", destCountry="
+                + destCountry + ", originCity=" + originCity + ", destinationCity=" + destinationCity
+                + ", originAirport=" + originAirport + ", destinationAirport=" + destinationAirport + ", departDate="
+                + departDate + ", departTime=" + departTime + ", arrivalDate=" + arrivalDate + ", arrivalTime="
+                + arrivalTime + ", economyFare=" + economyFare + ", businessFare=" + businessFare + ", firstClassFare="
+                + firstClassFare + ", company=" + company + ", flightType=" + flightType + ", timeTaken=" + timeTaken
+                + ", seatsAvailabe=" + seatsAvailabe + "]";
     }
 }
