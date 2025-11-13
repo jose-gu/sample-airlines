@@ -1,39 +1,65 @@
 package com.crossairlines.mapper;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+
 import com.crossairlines.dto.FlightDto;
-import com.crossairlines.model.Flight;
+import com.crossairlines.model.FlightEntity;
 
 public class FlightMapper {
     
-    public static Flight toEntity(FlightDto dto) {
+    private static final SimpleDateFormat DATE_FORMAT = new SimpleDateFormat("yyyy-MM-dd");
+    
+    public static FlightEntity toEntity(FlightDto dto) {
         if (dto == null) {
             return null;
         }
         
-        Flight flight = new Flight();
-        flight.setFlightDetailsId(dto.getFlightDetailsId());
-        flight.setFromCountry(dto.getFromCountry());
-        flight.setDestCountry(dto.getDestCountry());
-        flight.setOriginCity(dto.getOriginCity());
-        flight.setDestinationCity(dto.getDestinationCity());
-        flight.setOriginAirport(dto.getOriginAirport());
-        flight.setDestinationAirport(dto.getDestinationAirport());
-        flight.setDepartDate(dto.getDepartDate());
-        flight.setDepartTime(dto.getDepartTime());
-        flight.setArrivalDate(dto.getArrivalDate());
-        flight.setArrivalTime(dto.getArrivalTime());
-        flight.setEconomyFare(dto.getEconomyFare());
-        flight.setBusinessFare(dto.getBusinessFare());
-        flight.setFirstClassFare(dto.getFirstClassFare());
-        flight.setCompany(dto.getCompany());
-        flight.setFlightType(dto.getFlightType());
-        flight.setTimeTaken(dto.getTimeTaken());
-        flight.setSeatsAvailable(dto.getSeatsAvailable());
+        FlightEntity entity = new FlightEntity();
+        entity.setFlightDetailsId(dto.getFlightDetailsId());
+        entity.setFromCountry(dto.getFromCountry());
+        entity.setDestCountry(dto.getDestCountry());
+        entity.setOriginCity(dto.getOriginCity());
+        entity.setDestinationCity(dto.getDestinationCity());
+        entity.setOriginAirport(dto.getOriginAirport());
+        entity.setDestinationAirport(dto.getDestinationAirport());
         
-        return flight;
+        // Parse departure date
+        if (dto.getDepartDatet() != null) {
+            try {
+                Date departDate = DATE_FORMAT.parse(dto.getDepartDatet());
+                entity.setDepartDate(departDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        entity.setDepartTime(dto.getDepartTime());
+        
+        // Parse arrival date
+        if (dto.getArrivalDatet() != null) {
+            try {
+                Date arrivalDate = DATE_FORMAT.parse(dto.getArrivalDatet());
+                entity.setArrivalDate(arrivalDate);
+            } catch (ParseException e) {
+                e.printStackTrace();
+            }
+        }
+        
+        entity.setArrivalTime(dto.getArrivalTime());
+        entity.setEconomyFare(dto.getEconomyFare());
+        entity.setBusinessFare(dto.getBusinessFare());
+        entity.setFirstClassFare(dto.getFirstClassFare());
+        entity.setCompany(dto.getCompany());
+        entity.setFlightType(dto.getFlightType());
+        entity.setTimeTaken(dto.getTimeTaken());
+        entity.setSeatsAvailable(dto.getSeatsAvailable());
+        
+        return entity;
     }
     
-    public static FlightDto toDto(Flight entity) {
+    public static FlightDto toDto(FlightEntity entity) {
         if (entity == null) {
             return null;
         }
@@ -46,9 +72,19 @@ public class FlightMapper {
         dto.setDestinationCity(entity.getDestinationCity());
         dto.setOriginAirport(entity.getOriginAirport());
         dto.setDestinationAirport(entity.getDestinationAirport());
-        dto.setDepartDate(entity.getDepartDate());
+        
+        // Format departure date
+        if (entity.getDepartDate() != null) {
+            dto.setDepartDatet(DATE_FORMAT.format(entity.getDepartDate()));
+        }
+        
         dto.setDepartTime(entity.getDepartTime());
-        dto.setArrivalDate(entity.getArrivalDate());
+        
+        // Format arrival date
+        if (entity.getArrivalDate() != null) {
+            dto.setArrivalDatet(DATE_FORMAT.format(entity.getArrivalDate()));
+        }
+        
         dto.setArrivalTime(entity.getArrivalTime());
         dto.setEconomyFare(entity.getEconomyFare());
         dto.setBusinessFare(entity.getBusinessFare());

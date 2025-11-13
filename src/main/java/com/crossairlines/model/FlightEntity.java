@@ -1,74 +1,72 @@
-package com.crossairlines.dto;
+package com.crossairlines.model;
 
-import javax.validation.constraints.*;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import javax.persistence.*;
+import java.util.Date;
 
-public class FlightDto {
+@Entity
+@Table(name = "flight_details")
+public class FlightEntity {
     
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "flight_details_id")
     private int flightDetailsId;
     
-    @NotBlank(message = "From country is required")
-    @Size(max = 100, message = "From country must not exceed 100 characters")
+    @Column(name = "from_country")
     private String fromCountry;
     
-    @NotBlank(message = "Destination country is required")
-    @Size(max = 100, message = "Destination country must not exceed 100 characters")
+    @Column(name = "dest_country")
     private String destCountry;
     
-    @NotBlank(message = "Origin city is required")
-    @Size(max = 100, message = "Origin city must not exceed 100 characters")
+    @Column(name = "origin_city")
     private String originCity;
     
-    @NotBlank(message = "Destination city is required")
-    @Size(max = 100, message = "Destination city must not exceed 100 characters")
+    @Column(name = "destination_city")
     private String destinationCity;
     
-    @NotBlank(message = "Origin airport is required")
-    @Size(max = 100, message = "Origin airport must not exceed 100 characters")
+    @Column(name = "origin_airport")
     private String originAirport;
     
-    @NotBlank(message = "Destination airport is required")
-    @Size(max = 100, message = "Destination airport must not exceed 100 characters")
+    @Column(name = "destination_airport")
     private String destinationAirport;
     
-    @NotNull(message = "Departure date is required")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private String departDatet;
+    @Column(name = "depart_date")
+    @Temporal(TemporalType.DATE)
+    private Date departDate;
     
-    @NotBlank(message = "Departure time is required")
+    @Column(name = "depart_time")
     private String departTime;
     
-    @NotNull(message = "Arrival date is required")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private String arrivalDatet;
+    @Column(name = "arrival_date")
+    @Temporal(TemporalType.DATE)
+    private Date arrivalDate;
     
-    @NotBlank(message = "Arrival time is required")
+    @Column(name = "arrival_time")
     private String arrivalTime;
     
-    @Positive(message = "Economy fare must be positive")
+    @Column(name = "economy_fare")
     private double economyFare;
     
-    @Positive(message = "Business fare must be positive")
+    @Column(name = "business_fare")
     private double businessFare;
     
-    @Positive(message = "First class fare must be positive")
+    @Column(name = "first_class_fare")
     private double firstClassFare;
     
-    @NotBlank(message = "Company is required")
-    @Size(max = 100, message = "Company must not exceed 100 characters")
+    @Column(name = "company")
     private String company;
     
-    @NotBlank(message = "Flight type is required")
-    @Size(max = 50, message = "Flight type must not exceed 50 characters")
+    @Column(name = "flight_type")
     private String flightType;
     
+    @Column(name = "time_taken")
     private double timeTaken;
     
-    @Min(value = 1, message = "Seats available must be at least 1")
+    @Column(name = "seats_available")
     private int seatsAvailable = 100;
 
     // Default constructor
-    public FlightDto() {}
+    public FlightEntity() {}
 
     // Getters and Setters
     public int getFlightDetailsId() {
@@ -127,12 +125,12 @@ public class FlightDto {
         this.destinationAirport = destinationAirport;
     }
 
-    public String getDepartDatet() {
-        return departDatet;
+    public Date getDepartDate() {
+        return departDate;
     }
 
-    public void setDepartDatet(String departDatet) {
-        this.departDatet = departDatet;
+    public void setDepartDate(Date departDate) {
+        this.departDate = departDate;
     }
 
     public String getDepartTime() {
@@ -143,12 +141,12 @@ public class FlightDto {
         this.departTime = departTime;
     }
 
-    public String getArrivalDatet() {
-        return arrivalDatet;
+    public Date getArrivalDate() {
+        return arrivalDate;
     }
 
-    public void setArrivalDatet(String arrivalDatet) {
-        this.arrivalDatet = arrivalDatet;
+    public void setArrivalDate(Date arrivalDate) {
+        this.arrivalDate = arrivalDate;
     }
 
     public String getArrivalTime() {
@@ -217,10 +215,10 @@ public class FlightDto {
 
     @Override
     public String toString() {
-        return "FlightDto [flightDetailsId=" + flightDetailsId + ", fromCountry=" + fromCountry + ", destCountry="
+        return "FlightEntity [flightDetailsId=" + flightDetailsId + ", fromCountry=" + fromCountry + ", destCountry="
                 + destCountry + ", originCity=" + originCity + ", destinationCity=" + destinationCity
-                + ", originAirport=" + originAirport + ", destinationAirport=" + destinationAirport + ", departDatet="
-                + departDatet + ", departTime=" + departTime + ", arrivalDatet=" + arrivalDatet + ", arrivalTime="
+                + ", originAirport=" + originAirport + ", destinationAirport=" + destinationAirport + ", departDate="
+                + departDate + ", departTime=" + departTime + ", arrivalDate=" + arrivalDate + ", arrivalTime="
                 + arrivalTime + ", economyFare=" + economyFare + ", businessFare=" + businessFare + ", firstClassFare="
                 + firstClassFare + ", company=" + company + ", flightType=" + flightType + ", timeTaken=" + timeTaken
                 + ", seatsAvailable=" + seatsAvailable + "]";
