@@ -69,7 +69,7 @@ public class FlightDetails {
     // Default constructor
     public FlightDetails() {}
 
-    // Getters and setters
+    // Getters and Setters
     public int getFlightDetailsId() {
         return flightDetailsId;
     }

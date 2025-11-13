@@ -1,6 +1,11 @@
 package com.crossairlines.dto;
 
-import javax.validation.constraints.*;
+import java.util.Date;
+
+import javax.validation.constraints.NotBlank;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 public class FlightDto {
@@ -8,39 +13,33 @@ public class FlightDto {
     private int flightDetailsId;
     
     @NotBlank(message = "From country is required")
-    @Size(max = 100, message = "From country must not exceed 100 characters")
     private String fromCountry;
     
     @NotBlank(message = "Destination country is required")
-    @Size(max = 100, message = "Destination country must not exceed 100 characters")
     private String destCountry;
     
     @NotBlank(message = "Origin city is required")
-    @Size(max = 100, message = "Origin city must not exceed 100 characters")
     private String originCity;
     
     @NotBlank(message = "Destination city is required")
-    @Size(max = 100, message = "Destination city must not exceed 100 characters")
     private String destinationCity;
     
     @NotBlank(message = "Origin airport is required")
-    @Size(max = 100, message = "Origin airport must not exceed 100 characters")
     private String originAirport;
     
     @NotBlank(message = "Destination airport is required")
-    @Size(max = 100, message = "Destination airport must not exceed 100 characters")
     private String destinationAirport;
     
     @NotNull(message = "Departure date is required")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private String departDatet;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date departDate;
     
     @NotBlank(message = "Departure time is required")
     private String departTime;
     
     @NotNull(message = "Arrival date is required")
-    @JsonFormat(pattern = "yyyy-MM-dd")
-    private String arrivalDatet;
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd")
+    private Date arrivalDate;
     
     @NotBlank(message = "Arrival time is required")
     private String arrivalTime;
@@ -55,17 +54,14 @@ public class FlightDto {
     private double firstClassFare;
     
     @NotBlank(message = "Company is required")
-    @Size(max = 100, message = "Company must not exceed 100 characters")
     private String company;
     
     @NotBlank(message = "Flight type is required")
-    @Size(max = 50, message = "Flight type must not exceed 50 characters")
     private String flightType;
     
     private double timeTaken;
     
-    @Min(value = 1, message = "Seats available must be at least 1")
-    private int seatsAvailable = 100;
+    private int seatsAvailabe = 100;
 
     // Default constructor
     public FlightDto() {}
@@ -127,12 +123,12 @@ public class FlightDto {
         this.destinationAirport = destinationAirport;
     }
 
-    public String getDepartDatet() {
-        return departDatet;
+    public Date getDepartDate() {
+        return departDate;
     }
 
-    public void setDepartDatet(String departDatet) {
-        this.departDatet = departDatet;
+    public void setDepartDate(Date departDate) {
+        this.departDate = departDate;
     }
 
     public String getDepartTime() {
@@ -143,12 +139,12 @@ public class FlightDto {
         this.departTime = departTime;
     }
 
-    public String getArrivalDatet() {
-        return arrivalDatet;
+    public Date getArrivalDate() {
+        return arrivalDate;
     }
 
-    public void setArrivalDatet(String arrivalDatet) {
-        this.arrivalDatet = arrivalDatet;
+    public void setArrivalDate(Date arrivalDate) {
+        this.arrivalDate = arrivalDate;
     }
 
     public String getArrivalTime() {
@@ -207,22 +203,11 @@ public class FlightDto {
         this.timeTaken = timeTaken;
     }
 
-    public int getSeatsAvailable() {
-        return seatsAvailable;
+    public int getSeatsAvailabe() {
+        return seatsAvailabe;
     }
 
-    public void setSeatsAvailable(int seatsAvailable) {
-        this.seatsAvailable = seatsAvailable;
-    }
-
-    @Override
-    public String toString() {
-        return "FlightDto [flightDetailsId=" + flightDetailsId + ", fromCountry=" + fromCountry + ", destCountry="
-                + destCountry + ", originCity=" + originCity + ", destinationCity=" + destinationCity
-                + ", originAirport=" + originAirport + ", destinationAirport=" + destinationAirport + ", departDatet="
-                + departDatet + ", departTime=" + departTime + ", arrivalDatet=" + arrivalDatet + ", arrivalTime="
-                + arrivalTime + ", economyFare=" + economyFare + ", businessFare=" + businessFare + ", firstClassFare="
-                + firstClassFare + ", company=" + company + ", flightType=" + flightType + ", timeTaken=" + timeTaken
-                + ", seatsAvailable=" + seatsAvailable + "]";
+    public void setSeatsAvailabe(int seatsAvailabe) {
+        this.seatsAvailabe = seatsAvailabe;
     }
 }
