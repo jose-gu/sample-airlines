@@ -1,8 +1,6 @@
 package com.crossairlines.model;
 
 import javax.persistence.*;
-import java.time.LocalDate;
-import java.time.LocalTime;
 import java.util.Date;
 
 @Entity
@@ -65,8 +63,9 @@ public class FlightDetails {
     private double timeTaken;
     
     @Column(name = "seats_available")
-    private int seatsAvailabe = 100;
+    private int seatsAvailable = 100;
     
+    // Getters and Setters
     public int getFlightDetailsId() {
         return flightDetailsId;
     }
@@ -203,12 +202,12 @@ public class FlightDetails {
         this.timeTaken = timeTaken;
     }
     
-    public int getSeatsAvailabe() {
-        return seatsAvailabe;
+    public int getSeatsAvailable() {
+        return seatsAvailable;
     }
     
-    public void setSeatsAvailabe(int seatsAvailabe) {
-        this.seatsAvailabe = seatsAvailabe;
+    public void setSeatsAvailable(int seatsAvailable) {
+        this.seatsAvailable = seatsAvailable;
     }
     
     @Override
@@ -219,6 +218,6 @@ public class FlightDetails {
                 + departDate + ", departTime=" + departTime + ", arrivalDate=" + arrivalDate + ", arrivalTime="
                 + arrivalTime + ", economyFare=" + economyFare + ", businessFare=" + businessFare + ", firstClassFare="
                 + firstClassFare + ", company=" + company + ", flightType=" + flightType + ", timeTaken=" + timeTaken
-                + ", seatsAvailabe=" + seatsAvailabe + "]";
+                + ", seatsAvailable=" + seatsAvailable + "]";
     }
 }
