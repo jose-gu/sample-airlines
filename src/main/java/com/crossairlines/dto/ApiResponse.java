@@ -1,23 +1,43 @@
 package com.crossairlines.dto;
 
-import java.time.LocalDateTime;
-
 public class ApiResponse<T> {
     
     private boolean success;
     private String message;
     private T data;
-    private LocalDateTime timestamp;
     
     // Default constructor
     public ApiResponse() {}
     
     // Constructor with all fields
-    public ApiResponse(boolean success, String message, T data, LocalDateTime timestamp) {
+    public ApiResponse(boolean success, String message, T data) {
         this.success = success;
         this.message = message;
         this.data = data;
-        this.timestamp = timestamp;
+    }
+    
+    // Constructor for success response without data
+    public ApiResponse(boolean success, String message) {
+        this.success = success;
+        this.message = message;
+        this.data = null;
+    }
+    
+    // Static factory methods for convenience
+    public static <T> ApiResponse<T> success(String message, T data) {
+        return new ApiResponse<>(true, message, data);
+    }
+    
+    public static <T> ApiResponse<T> success(String message) {
+        return new ApiResponse<>(true, message, null);
+    }
+    
+    public static <T> ApiResponse<T> error(String message) {
+        return new ApiResponse<>(false, message, null);
+    }
+    
+    public static <T> ApiResponse<T> error(String message, T data) {
+        return new ApiResponse<>(false, message, data);
     }
     
     // Getters and Setters
@@ -45,17 +65,8 @@ public class ApiResponse<T> {
         this.data = data;
     }
     
-    public LocalDateTime getTimestamp() {
-        return timestamp;
-    }
-    
-    public void setTimestamp(LocalDateTime timestamp) {
-        this.timestamp = timestamp;
-    }
-    
     @Override
     public String toString() {
-        return "ApiResponse [success=" + success + ", message=" + message + ", data=" + data + ", timestamp="
-                + timestamp + "]";
+        return "ApiResponse [success=" + success + ", message=" + message + ", data=" + data + "]";
     }
 }

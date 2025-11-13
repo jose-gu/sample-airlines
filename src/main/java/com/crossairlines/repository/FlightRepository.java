@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 import com.crossairlines.model.Flight;
 
 @Repository
-public interface FlightRepository extends JpaRepository<Flight, Integer> {
+public interface FlightRepository extends JpaRepository<Flight, Long> {
 }

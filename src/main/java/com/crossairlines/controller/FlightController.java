@@ -9,25 +9,21 @@ import com.crossairlines.dto.ApiResponse;
 import com.crossairlines.dto.FlightDto;
 import com.crossairlines.service.FlightService;
 
-import javax.validation.Valid;
-import java.time.LocalDateTime;
-
 @RestController
 @RequestMapping("/api/flights")
 public class FlightController {
-
+    
     @Autowired
     private FlightService flightService;
-
+    
     @PostMapping
-    public ResponseEntity<ApiResponse<FlightDto>> addFlight(@Valid @RequestBody FlightDto flightDto) {
+    public ResponseEntity<ApiResponse<String>> addFlight(@RequestBody FlightDto flightDto) {
         try {
-            FlightDto savedFlight = flightService.addFlight(flightDto);
-            ApiResponse<FlightDto> response = new ApiResponse<>(true, "Flight added successfully", savedFlight, LocalDateTime.now());
-            return new ResponseEntity<>(response, HttpStatus.CREATED);
+            flightService.addFlight(flightDto);
+            return ResponseEntity.ok(new ApiResponse<>(true, "Flight added successfully", null));
         } catch (Exception e) {
-            ApiResponse<FlightDto> response = new ApiResponse<>(false, "Error adding flight: " + e.getMessage(), null, LocalDateTime.now());
-            return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body(new ApiResponse<>(false, "Error adding flight: " + e.getMessage(), null));
         }
     }
 }
