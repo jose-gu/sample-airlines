@@ -11,7 +11,7 @@ public class FlightDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "flight_details_id")
-    private Long flightDetailsId;
+    private int flightDetailsId;
     
     @Column(name = "from_country")
     private String fromCountry;
@@ -64,17 +64,17 @@ public class FlightDetails {
     private double timeTaken;
     
     @Column(name = "seats_available")
-    private int seatsAvailable = 100;
+    private int seatsAvailabe = 100;
 
     // Default constructor
     public FlightDetails() {}
 
-    // Getters and Setters
-    public Long getFlightDetailsId() {
+    // Getters and setters
+    public int getFlightDetailsId() {
         return flightDetailsId;
     }
 
-    public void setFlightDetailsId(Long flightDetailsId) {
+    public void setFlightDetailsId(int flightDetailsId) {
         this.flightDetailsId = flightDetailsId;
     }
 
@@ -206,12 +206,12 @@ public class FlightDetails {
         this.timeTaken = timeTaken;
     }
 
-    public int getSeatsAvailable() {
-        return seatsAvailable;
+    public int getSeatsAvailabe() {
+        return seatsAvailabe;
     }
 
-    public void setSeatsAvailable(int seatsAvailable) {
-        this.seatsAvailable = seatsAvailable;
+    public void setSeatsAvailabe(int seatsAvailabe) {
+        this.seatsAvailabe = seatsAvailabe;
     }
 
     @Override
@@ -222,6 +222,6 @@ public class FlightDetails {
                 + departDate + ", departTime=" + departTime + ", arrivalDate=" + arrivalDate + ", arrivalTime="
                 + arrivalTime + ", economyFare=" + economyFare + ", businessFare=" + businessFare + ", firstClassFare="
                 + firstClassFare + ", company=" + company + ", flightType=" + flightType + ", timeTaken=" + timeTaken
-                + ", seatsAvailable=" + seatsAvailable + "]";
+                + ", seatsAvailabe=" + seatsAvailabe + "]";
     }
 }
