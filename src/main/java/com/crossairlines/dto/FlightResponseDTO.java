@@ -1,75 +1,56 @@
-package com.crossairlines.model;
+package com.crossairlines.dto;
 
 import java.util.Date;
 
-import javax.persistence.*;
-
-@Entity
-@Table(name = "flight_details")
-public class FlightDetails {
+public class FlightResponseDTO {
     
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "flight_details_id")
+    private boolean success;
+    private String message;
     private Long flightDetailsId;
-    
-    @Column(name = "from_country")
     private String fromCountry;
-    
-    @Column(name = "dest_country")
     private String destCountry;
-    
-    @Column(name = "origin_city")
     private String originCity;
-    
-    @Column(name = "destination_city")
     private String destinationCity;
-    
-    @Column(name = "origin_airport")
     private String originAirport;
-    
-    @Column(name = "destination_airport")
     private String destinationAirport;
-    
-    @Column(name = "depart_date")
-    @Temporal(TemporalType.DATE)
     private Date departDate;
-    
-    @Column(name = "depart_time")
     private String departTime;
-    
-    @Column(name = "arrival_date")
-    @Temporal(TemporalType.DATE)
     private Date arrivalDate;
-    
-    @Column(name = "arrival_time")
     private String arrivalTime;
-    
-    @Column(name = "economy_fare")
     private double economyFare;
-    
-    @Column(name = "business_fare")
     private double businessFare;
-    
-    @Column(name = "first_class_fare")
     private double firstClassFare;
-    
-    @Column(name = "company")
     private String company;
-    
-    @Column(name = "flight_type")
     private String flightType;
-    
-    @Column(name = "time_taken")
     private double timeTaken;
-    
-    @Column(name = "seats_available")
-    private int seatsAvailable = 100;
+    private int seatsAvailable;
 
     // Default constructor
-    public FlightDetails() {}
+    public FlightResponseDTO() {}
+
+    // Constructor with success and message
+    public FlightResponseDTO(boolean success, String message) {
+        this.success = success;
+        this.message = message;
+    }
 
     // Getters and Setters
+    public boolean isSuccess() {
+        return success;
+    }
+
+    public void setSuccess(boolean success) {
+        this.success = success;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
     public Long getFlightDetailsId() {
         return flightDetailsId;
     }
@@ -212,16 +193,5 @@ public class FlightDetails {
 
     public void setSeatsAvailable(int seatsAvailable) {
         this.seatsAvailable = seatsAvailable;
-    }
-
-    @Override
-    public String toString() {
-        return "FlightDetails [flightDetailsId=" + flightDetailsId + ", fromCountry=" + fromCountry + ", destCountry="
-                + destCountry + ", originCity=" + originCity + ", destinationCity=" + destinationCity
-                + ", originAirport=" + originAirport + ", destinationAirport=" + destinationAirport + ", departDate="
-                + departDate + ", departTime=" + departTime + ", arrivalDate=" + arrivalDate + ", arrivalTime="
-                + arrivalTime + ", economyFare=" + economyFare + ", businessFare=" + businessFare + ", firstClassFare="
-                + firstClassFare + ", company=" + company + ", flightType=" + flightType + ", timeTaken=" + timeTaken
-                + ", seatsAvailable=" + seatsAvailable + "]";
     }
 }
