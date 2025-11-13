@@ -5,25 +5,25 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import com.crossairlines.dto.ApiResponse;
 import com.crossairlines.dto.FlightDto;
 import com.crossairlines.service.FlightService;
+
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/api/flights")
 public class FlightController {
-    
+
     @Autowired
     private FlightService flightService;
-    
+
     @PostMapping
-    public ResponseEntity<ApiResponse<String>> addFlight(@RequestBody FlightDto flightDto) {
+    public ResponseEntity<String> addFlight(@Valid @RequestBody FlightDto flightDto) {
         try {
             flightService.addFlight(flightDto);
-            return ResponseEntity.ok(new ApiResponse<>(true, "Flight added successfully", null));
+            return ResponseEntity.status(HttpStatus.CREATED).body("Flight added successfully");
         } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(new ApiResponse<>(false, "Error adding flight: " + e.getMessage(), null));
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error adding flight: " + e.getMessage());
         }
     }
 }
